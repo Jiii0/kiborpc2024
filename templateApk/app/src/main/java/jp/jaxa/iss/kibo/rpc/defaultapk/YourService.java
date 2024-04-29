@@ -25,6 +25,7 @@ public class YourService extends KiboRpcService {
         Movement move = new Movement(api);
         AREvent arEvent = new AREvent(api);
         ARMarker arMarker = new ARMarker(api);
+        ItemRecognition itemRecognition = new ItemRecognition(api, "lost_items.tflite");
 
         move.MoveToPoint(10.9d, -9.92284d, 5.195d, 0f, 0f, -0.707f,0.707f);
 
@@ -35,6 +36,10 @@ public class YourService extends KiboRpcService {
         arEvent.SaveMarkers(undistortedNavImage, arMarker);
         List<Point> corners =  arMarker.GetMarkerPos();
         Point size = arMarker.GetMarkerSize(corners);
+        arMarker.GetRotation(corners);
+
+        itemRecognition.RunObjectDetection(undistortedNavImage);
+
 
 
         // Scan All Objects then Go to the Astronaut

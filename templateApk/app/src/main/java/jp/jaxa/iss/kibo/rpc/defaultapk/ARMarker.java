@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.nasa.arc.astrobee.Kinematics;
+import gov.nasa.arc.astrobee.types.Quaternion;
 import jp.jaxa.iss.kibo.rpc.api.KiboRpcApi;
 import jp.jaxa.iss.kibo.rpc.api.KiboRpcService;
 
@@ -41,10 +42,22 @@ public class ARMarker extends KiboRpcService {
     }
 
     public Point GetMarkerSize(List<Point> corners) {
-        double width = Math.abs((corners.get(0).x - corners.get(1).x));
-        double height = Math.abs((corners.get(0).y - corners.get(3).y));
+        double dx1 = (corners.get(0).x - corners.get(2).x);
+        double dy1 = (corners.get(0).y - corners.get(2).y);
+        double width = Math.sqrt(dx1*dx1 + dy1*dy1);
+        double dx2 = (corners.get(0).x - corners.get(1).x);
+        double dy2 = (corners.get(0).y - corners.get(1).y);
+        double height = Math.sqrt(dx2*dx2 + dy2*dy2);
 
         Log.i("GetMarkerSize", String.format("Width: %f, Height: %f", (float) width, (float) height));
         return new Point(width, height);
+    }
+
+    public void GetRotation(List<Point> corners) {
+        double dx = (corners.get(0).x - corners.get(1).x);
+        double dy = (corners.get(0).y - corners.get(1).y);
+
+        double angle = Math.atan(dy/dx);
+        Log.i("GetRotation", String.format("Angle : %f", (float) angle));
     }
 }
